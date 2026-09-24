@@ -1,7 +1,9 @@
+import Hero from "@/components/Hero";
+
 const HomePage = () => {
   return (
     <main>
-      <h1>FitLog</h1>
+      <Hero />
     </main>
   );
 };
