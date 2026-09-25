@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 type Workout = {
   id: number;
@@ -18,8 +19,10 @@ type WorkoutCardProps = {
 
 const WorkoutCard = ({ workout }: WorkoutCardProps) => {
   return (
-    <div className="overflow-hidden rounded-lg border border-white/5 bg-[#15171b]">
-      {/* Workout Image */}
+    <Link
+      href={`/workout/${workout.id}`}
+      className="block overflow-hidden rounded-lg border border-white/5 bg-[#15171b] transition hover:border-white/15"
+    >
       <div className="relative aspect-[16/9] w-full overflow-hidden bg-[#111214]">
         <Image
           src={workout.image}
@@ -30,7 +33,6 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
         />
       </div>
 
-      {/* Workout Information */}
       <div className="p-4">
         {/* Muscle Groups */}
         <div className="flex flex-wrap gap-1.5">
@@ -57,7 +59,7 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
         {/* Divider */}
         <div className="my-3 border-t border-white/10" />
 
-        {/* Workout Stats */}
+        {/* Stats */}
         <div className="flex flex-wrap items-center gap-3 text-[9px] text-gray-500 sm:text-[10px]">
           <span>◷ {workout.duration} min</span>
 
@@ -66,7 +68,7 @@ const WorkoutCard = ({ workout }: WorkoutCardProps) => {
           <span>★ {workout.rating}</span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

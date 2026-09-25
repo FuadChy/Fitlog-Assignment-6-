@@ -1,4 +1,5 @@
 import Image from "next/image";
+import WorkoutActions from "@/components/WorkoutActions";
 
 type Workout = {
   id: number;
@@ -37,7 +38,7 @@ const WorkoutDetailsPage = async ({
     <main className="min-h-screen bg-[#0b0c0f] px-4 py-8 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_1.05fr] lg:gap-10">
-          {/* Left - Workout Image */}
+          {/* Workout Image */}
           <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-[#15171b]">
             <Image
               src={workout.image}
@@ -49,14 +50,12 @@ const WorkoutDetailsPage = async ({
             />
           </div>
 
-          {/* Right - Workout Information */}
+          {/* Workout Information */}
           <div>
-            {/* Title */}
             <h1 className="text-3xl font-extrabold uppercase leading-none tracking-tight text-white sm:text-4xl">
               {workout.name}
             </h1>
 
-            {/* Description */}
             <p className="mt-3 max-w-xl text-xs leading-5 text-gray-400 sm:text-sm">
               {workout.description}
             </p>
@@ -75,7 +74,6 @@ const WorkoutDetailsPage = async ({
 
             {/* Workout Specs */}
             <div className="mt-5 overflow-hidden rounded-lg border border-white/10 bg-[#15171b]">
-              {/* Equipment */}
               <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Equipment
@@ -86,7 +84,6 @@ const WorkoutDetailsPage = async ({
                 </span>
               </div>
 
-              {/* Difficulty */}
               <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Difficulty
@@ -97,7 +94,6 @@ const WorkoutDetailsPage = async ({
                 </span>
               </div>
 
-              {/* Sets */}
               <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Sets
@@ -108,7 +104,6 @@ const WorkoutDetailsPage = async ({
                 </span>
               </div>
 
-              {/* Reps */}
               <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Reps
@@ -119,7 +114,6 @@ const WorkoutDetailsPage = async ({
                 </span>
               </div>
 
-              {/* Duration */}
               <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Duration
@@ -130,7 +124,6 @@ const WorkoutDetailsPage = async ({
                 </span>
               </div>
 
-              {/* Calories */}
               <div className="flex items-center justify-between border-b border-white/5 px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Calories
@@ -141,7 +134,6 @@ const WorkoutDetailsPage = async ({
                 </span>
               </div>
 
-              {/* Rating */}
               <div className="flex items-center justify-between px-4 py-3">
                 <span className="text-[8px] font-bold uppercase tracking-wide text-gray-500">
                   Rating
@@ -175,22 +167,8 @@ const WorkoutDetailsPage = async ({
               </ol>
             </div>
 
-            {/* Action Buttons */}
-            <div className="mt-6 flex flex-col gap-2 sm:flex-row">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-md bg-[#C2F800] px-4 py-2.5 text-[9px] font-bold uppercase text-black transition hover:bg-[#b8e600]"
-              >
-                Add to today's plan
-              </button>
-
-              <button
-                type="button"
-                className="inline-flex items-center justify-center rounded-md border border-white/20 px-4 py-2.5 text-[9px] font-bold uppercase text-white transition hover:bg-white/5"
-              >
-                Save for later
-              </button>
-            </div>
+            {/* Actions */}
+            <WorkoutActions workout={workout} />
           </div>
         </div>
       </div>

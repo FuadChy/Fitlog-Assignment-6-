@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { useFitLog } from "@/context/FitLogContext";
 
 const Navbar = () => {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+
+  const { plan, saved } = useFitLog();
 
   const isWorkoutActive = pathname === "/";
   const isPlanActive = pathname === "/my-plan";
@@ -66,7 +69,7 @@ const Navbar = () => {
               <span className="hidden sm:inline">Plan</span>
 
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[#ccff00] px-1.5 text-[10px] font-bold text-black">
-                0
+                {plan.length}
               </span>
             </Link>
 
@@ -78,7 +81,7 @@ const Navbar = () => {
               <span className="hidden sm:inline">Saved</span>
 
               <span className="flex h-5 min-w-5 items-center justify-center rounded-full border border-white/30 px-1.5 text-[10px] font-bold text-white">
-                0
+                {saved.length}
               </span>
             </Link>
 
@@ -91,12 +94,7 @@ const Navbar = () => {
               aria-expanded={menuOpen}
             >
               {menuOpen ? (
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M6 6L18 18M18 6L6 18"
                     stroke="currentColor"
@@ -105,12 +103,7 @@ const Navbar = () => {
                   />
                 </svg>
               ) : (
-                <svg
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                   <path
                     d="M4 7H20M4 12H20M4 17H20"
                     stroke="currentColor"
