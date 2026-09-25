@@ -26,40 +26,47 @@ type WorkoutActionsProps = {
 const WorkoutActions = ({ workout }: WorkoutActionsProps) => {
   const { addToPlan, saveWorkout, plan, saved } = useFitLog();
 
-  const [planMessage, setPlanMessage] = useState("");
-  const [savedMessage, setSavedMessage] = useState("");
+  const [toast, setToast] = useState("");
 
   const isInPlan = plan.some((item) => item.id === workout.id);
   const isSaved = saved.some((item) => item.id === workout.id);
 
+  const showToast = (message: string) => {
+    setToast(message);
+
+    setTimeout(() => {
+      setToast("");
+    }, 2500);
+  };
+
   const handleAddToPlan = () => {
     if (isInPlan) {
-      setPlanMessage("Already in today's plan");
+      showToast("Already in today's plan");
       return;
     }
 
     if (plan.length >= 5) {
-      setPlanMessage("Today's plan is full");
+      showToast("Today's plan is full");
       return;
     }
 
     addToPlan(workout);
-    setPlanMessage("Added to today's plan");
+    showToast("Added to today's plan");
   };
 
   const handleSaveWorkout = () => {
     if (isSaved) {
-      setSavedMessage("Already saved");
+      showToast("Already saved");
       return;
     }
 
     saveWorkout(workout);
-    setSavedMessage("Saved for later");
+    showToast("Saved for later");
   };
 
   return (
-    <div className="mt-6">
-      <div className="flex flex-col gap-2 sm:flex-row">
+    <>
+      <div className="mt-6 flex flex-col gap-2 sm:flex-row">
         <button
           type="button"
           onClick={handleAddToPlan}
@@ -77,18 +84,15 @@ const WorkoutActions = ({ workout }: WorkoutActionsProps) => {
         </button>
       </div>
 
-      {planMessage && (
-        <p className="mt-2 text-[9px] text-[#C2F800]">
-          {planMessage}
-        </p>
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-md border border-white/10 bg-[#15171b] px-4 py-3 shadow-lg">
+          <p className="text-[9px] font-medium text-[#C2F800]">
+            {toast}
+          </p>
+        </div>
       )}
-
-      {savedMessage && (
-        <p className="mt-2 text-[9px] text-[#C2F800]">
-          {savedMessage}
-        </p>
-      )}
-    </div>
+    </>
   );
 };
 
