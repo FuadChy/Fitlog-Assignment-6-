@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
+import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
 import { FitLogProvider } from "@/context/FitLogContext";
 
@@ -33,7 +34,11 @@ const RootLayout = ({
       >
         <FitLogProvider>
           <Navbar />
-          {children}
+
+          <div className="flex min-h-screen flex-col">
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
         </FitLogProvider>
       </body>
     </html>

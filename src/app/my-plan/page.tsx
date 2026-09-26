@@ -19,6 +19,15 @@ const MyPlanPage = () => {
 
   const [activeTab, setActiveTab] = useState<"plan" | "saved">("plan");
   const [sortBy, setSortBy] = useState<SortOption>("duration");
+  const [toast, setToast] = useState("");
+
+  const showToast = (message: string) => {
+    setToast(message);
+
+    setTimeout(() => {
+      setToast("");
+    }, 2500);
+  };
 
   const totalMinutes = plan.reduce(
     (total, workout) => total + workout.duration,
@@ -44,10 +53,24 @@ const MyPlanPage = () => {
     return b.rating - a.rating;
   });
 
+  const handleMarkAsDone = (id: number) => {
+    markAsDone(id);
+    showToast("Workout marked as done");
+  };
+
+  const handleRemove = (id: number) => {
+    if (activeTab === "plan") {
+      removeFromPlan(id);
+      showToast("Workout removed from today's plan");
+    } else {
+      removeFromSaved(id);
+      showToast("Workout removed from saved");
+    }
+  };
+
   return (
     <main className="min-h-screen bg-[#0b0c0f] px-4 py-7 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-7xl">
-        {/* Header */}
         <section>
           <h1 className="text-2xl font-extrabold uppercase tracking-tight text-white sm:text-3xl">
             MY PLAN
@@ -58,37 +81,30 @@ const MyPlanPage = () => {
           </p>
         </section>
 
-        {/* Metrics */}
         <section className="mt-6 overflow-hidden rounded-lg border border-white/10 bg-[#15171b]">
           <div className="grid grid-cols-3">
-            {/* Exercises */}
             <div className="border-r border-white/10 px-4 py-4 sm:px-6">
               <p className="text-[8px] font-medium text-gray-500 sm:text-[9px]">
                 Exercises
               </p>
-
               <p className="mt-1 text-2xl font-extrabold leading-none text-[#C2F800] sm:text-3xl">
                 {plan.length}
               </p>
             </div>
 
-            {/* Minutes */}
             <div className="border-r border-white/10 px-4 py-4 sm:px-6">
               <p className="text-[8px] font-medium text-gray-500 sm:text-[9px]">
                 Minutes
               </p>
-
               <p className="mt-1 text-2xl font-extrabold leading-none text-white sm:text-3xl">
                 {totalMinutes}
               </p>
             </div>
 
-            {/* Calories */}
             <div className="px-4 py-4 sm:px-6">
               <p className="text-[8px] font-medium text-gray-500 sm:text-[9px]">
                 Calories
               </p>
-
               <p className="mt-1 text-2xl font-extrabold leading-none text-white sm:text-3xl">
                 {totalCalories}
               </p>
@@ -96,9 +112,7 @@ const MyPlanPage = () => {
           </div>
         </section>
 
-        {/* Tabs + Sort */}
         <section className="mt-5 flex items-center justify-between gap-4">
-          {/* Tabs */}
           <div className="flex rounded-md border border-white/10 bg-[#15171b] p-0.5">
             <button
               type="button"
@@ -125,7 +139,6 @@ const MyPlanPage = () => {
             </button>
           </div>
 
-          {/* Sort */}
           <div className="flex items-center gap-2">
             <span className="hidden text-[8px] text-gray-500 sm:inline">
               Sort By
@@ -145,7 +158,6 @@ const MyPlanPage = () => {
           </div>
         </section>
 
-        {/* Workout List */}
         {sortedWorkouts.length === 0 ? (
           <section className="mt-4 flex min-h-[185px] items-center justify-center rounded-lg border border-dashed border-white/10 bg-[#0e1013] px-6">
             <div className="text-center">
@@ -178,7 +190,6 @@ const MyPlanPage = () => {
                   className="rounded-lg border border-white/10 bg-[#15171b] p-2.5 transition hover:border-white/15 sm:p-3"
                 >
                   <div className="flex items-center gap-3">
-                    {/* Image */}
                     <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-md bg-[#111214] sm:h-16 sm:w-24">
                       <Image
                         src={workout.image}
@@ -189,9 +200,7 @@ const MyPlanPage = () => {
                       />
                     </div>
 
-                    {/* Workout Info */}
                     <div className="min-w-0 flex-1">
-                      {/* Muscle Groups */}
                       <div className="flex flex-wrap gap-1">
                         {workout.muscleGroups.map((muscleGroup) => (
                           <span
@@ -203,17 +212,14 @@ const MyPlanPage = () => {
                         ))}
                       </div>
 
-                      {/* Name */}
                       <h2 className="mt-1 truncate text-[10px] font-extrabold uppercase text-white sm:text-xs">
                         {workout.name}
                       </h2>
 
-                      {/* Equipment */}
                       <p className="truncate text-[7px] text-gray-500 sm:text-[8px]">
                         {workout.equipment}
                       </p>
 
-                      {/* Stats */}
                       <div className="mt-1.5 flex flex-wrap items-center gap-2 text-[7px] text-gray-500 sm:text-[8px]">
                         <span>◷ {workout.duration} min</span>
                         <span>◉ {workout.caloriesBurned} kcal</span>
@@ -221,7 +227,6 @@ const MyPlanPage = () => {
                       </div>
                     </div>
 
-                    {/* Actions */}
                     <div className="hidden shrink-0 items-center gap-2 sm:flex">
                       <Link
                         href={`/workout/${workout.id}`}
@@ -233,7 +238,7 @@ const MyPlanPage = () => {
                       {activeTab === "plan" && (
                         <button
                           type="button"
-                          onClick={() => markAsDone(workout.id)}
+                          onClick={() => handleMarkAsDone(workout.id)}
                           disabled={isCompleted}
                           className={`flex items-center gap-1 rounded-full px-3 py-1.5 text-[7px] font-bold transition ${
                             isCompleted
@@ -248,11 +253,7 @@ const MyPlanPage = () => {
 
                       <button
                         type="button"
-                        onClick={() =>
-                          activeTab === "plan"
-                            ? removeFromPlan(workout.id)
-                            : removeFromSaved(workout.id)
-                        }
+                        onClick={() => handleRemove(workout.id)}
                         className="flex h-6 w-6 items-center justify-center rounded-full text-gray-500 transition hover:bg-white/5 hover:text-white"
                         aria-label={`Remove ${workout.name}`}
                       >
@@ -260,7 +261,6 @@ const MyPlanPage = () => {
                       </button>
                     </div>
 
-                    {/* Mobile Actions */}
                     <div className="flex shrink-0 flex-col items-end gap-1 sm:hidden">
                       <Link
                         href={`/workout/${workout.id}`}
@@ -272,7 +272,7 @@ const MyPlanPage = () => {
                       {activeTab === "plan" && (
                         <button
                           type="button"
-                          onClick={() => markAsDone(workout.id)}
+                          onClick={() => handleMarkAsDone(workout.id)}
                           disabled={isCompleted}
                           className={`rounded-full px-2 py-1 text-[6px] font-bold ${
                             isCompleted
@@ -286,11 +286,7 @@ const MyPlanPage = () => {
 
                       <button
                         type="button"
-                        onClick={() =>
-                          activeTab === "plan"
-                            ? removeFromPlan(workout.id)
-                            : removeFromSaved(workout.id)
-                        }
+                        onClick={() => handleRemove(workout.id)}
                         className="text-[10px] text-gray-500"
                         aria-label={`Remove ${workout.name}`}
                       >
@@ -305,22 +301,13 @@ const MyPlanPage = () => {
         )}
       </div>
 
-      {/* Footer */}
-      <footer className="mx-auto mt-6 max-w-7xl border-t border-white/10 pt-4">
-        <div className="flex items-center justify-between">
-          <Link
-            href="/"
-            className="flex items-center gap-1.5 text-[9px] font-bold text-white"
-          >
-            <span className="text-[#C2F800]">⚡</span>
-            FITLOG
-          </Link>
-
-          <p className="text-[7px] text-gray-600 sm:text-[8px]">
-            © 2026 FitLog — Workout Library. Train hard, log honest.
+      {toast && (
+        <div className="fixed bottom-5 left-1/2 z-50 -translate-x-1/2 rounded-md border border-white/10 bg-[#15171b] px-4 py-3 shadow-lg">
+          <p className="text-[9px] font-medium text-[#C2F800]">
+            {toast}
           </p>
         </div>
-      </footer>
+      )}
     </main>
   );
 };
